@@ -31,6 +31,7 @@ static uint32_t next_pc;
 static Cache *dcache;
 static Cache *icache;
 static BPU *bpu;
+static const char *kernel_bin;
 
 #define gen_mask(len) ((1<<(len))-1)
 #define get_field(_tgt, _be, _bs) (_tgt>>(_bs)) & gen_mask((_be)-(_bs)+1)
@@ -190,10 +191,16 @@ void cpu_clk() {
 
     timestamp += icache->getDelay(segmap(pc), false);
 
+    /* ==================================*/
+    /* Set breakpoints here... */
+    
+    /*
 if(pc==0x80000008) {
-printf("op=%x\n",f_opcode);
+printf("op=%x r2=%x\n",f_opcode, get_regfile(2));
 exit(1);
 }
+*/
+    /* ==================================*/
 
     switch(f_opcode) {
         case 0x0:
@@ -386,7 +393,7 @@ void optimise_icache() {
                             break;
                     }
 
-                    termtest_init(testname);
+                    termtest_init(kernel_bin, testname);
                     cpu_rst();
 
                     for(;;) {
@@ -495,7 +502,7 @@ void optimise_dcache() {
                             break;
                     }
 
-                    termtest_init(testname);
+                    termtest_init(kernel_bin, testname);
                     cpu_rst();
 
                     for(;;) {
@@ -541,8 +548,20 @@ void optimise_dcache() {
     std::cout<<"\tP_SETS="<<tgt_p_sets<<std::endl;
 }
 
-int main()
+static int usage(const char *exec)
 {
+    printf("Usage: %s <kernel_bin> <testcase>\nArguments:\n", exec);
+    printf(" <kernel_bin>  Binary of supervisor program (In NSCSCC2020, this is 'supervisor_v2.01/kernel/kernel.bin').\n");
+    printf(" <testcase>    One of STREAM , MATRIX or CRYPTONIGHT.\n");
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+  if (argc < 3)
+       return usage(argv[0]);
+    kernel_bin = argv[1];
+    
     bpu = new BPU();
     //optimise();
     //optimise_icache();
@@ -570,6 +589,7 @@ int main()
 
     icache = new Cache(true, 1, 6, icache_P_LINE, 0, icacheMissRead, icacheMissWrite, icacheMissWriteRead);
 
+#if 0
     extern size_t filesize(FILE *fp) ;
     FILE *fp = fopen("../../template/hardloop.bin", "rb");
     size_t len = filesize(fp);
@@ -580,8 +600,9 @@ int main()
         assert(0);
     }
     fclose(fp);
+#endif
 
-    //termtest_init("MATRIX"); //"CRYPTONIGHT");
+    termtest_init(kernel_bin, argv[2]);
     cpu_rst();
 
     for(;;) {

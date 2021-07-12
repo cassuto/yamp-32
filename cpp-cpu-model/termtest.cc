@@ -73,14 +73,14 @@ size_t filesize(FILE *fp) {
     return len;
 }
 
-void termtest_init(const std::string &name) {
+void termtest_init(const char *kernel_bin, const std::string &name) {
     utest["STREAM"] = (utest_entry){0x300c, 0x30};
     utest["MATRIX"] = (utest_entry){0x303c, 0x88};
     utest["CRYPTONIGHT"] = (utest_entry){0x30c4, 0x98};
     
     memset(extmem, 0, sizeof(extmem));
     memset(basemem, 0, sizeof(basemem));
-    FILE *fp = fopen("../kernel.bin", "rb");
+    FILE *fp = fopen(kernel_bin, "rb");
     size_t len = filesize(fp);
     if (len > BASEMEM_SIZE) {
         assert(0);
