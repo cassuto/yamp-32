@@ -54,7 +54,7 @@ NSCSCC2020-个人赛
 
 
 
-#### 如何使用C++模型
+### 如何使用C++模型
 
 C++模型模拟MIPS指令的运行，精确计算Cache Miss或分支预测失败带来的开销，自动调参，输出统计信息，为微架构设计与优化提供量化依据。
 
@@ -89,49 +89,45 @@ make -j8
 如下为程序运行结果的一个实例：
 
 ```
+WARNING! unknown writing operation to UART.
 Boot message:MONITOR for MIPS32 - initialized.
 User program written
   Program Readback:
 
-40 80 04 3c 41 80 05 3c 42 80 06 3c 60 00 07 24
-25 18 00 00 1a 00 67 10 80 40 03 00 40 52 03 00
-21 40 88 00 21 50 aa 00 25 48 00 00 12 00 27 11
-40 12 09 00 00 00 0f 8d 21 10 c2 00 25 60 40 01
-25 58 00 00 09 00 67 11 01 00 6b 25 00 00 8d 8d
-00 00 4e 8c 02 68 ed 71 04 00 42 24 04 00 8c 25
-21 68 cd 01 f7 ff 00 10 fc ff 4d ac 01 00 29 25
-ee ff 00 10 00 02 08 25 e6 ff 00 10 01 00 63 24
-08 00 e0 03 00 00 00 00
+10 80 04 3c 40 80 05 3c 30 00 06 3c 21 30 86 00
+05 00 86 10 04 00 a5 24 00 00 82 8c fc ff a2 ac
+fb ff 00 10 04 00 84 24 08 00 e0 03 00 00 00 00
+
 Program memory content verified
 Data memory content verified
 =======
-Clks: 12516672
-Secs: 0.125167
+Clks: 9831244
+Secs: 0.0983124
 =======
--------clk: 12516672
+-------clk: 10355664
 DCache
 Cache dump:
-        Hit: 0
-        Miss: 0
-                Writeback: 0
-        P(h) = -nan
+        Hit: 787564
+        Miss: 786509
+                Writeback: 327765
+        P(h) = 0.500335
 ICache
 Cache dump:
-        Hit: 8962251
-        Miss: 7
+        Hit: 4723960
+        Miss: 8
                 Writeback: 0
-        P(h) = 0.999999
+        P(h) = 0.999998
 ==================
 BPU dump:
         JR
-        JR Hit:732
+        JR Hit:292
         JR Miss:2
-        JR P(h):0.997275
+        JR P(h):0.993197
         BCC
-        BCC Hit:1788467
-        BCC Miss:10015
-        BCC P(h):0.994431
-sb_hit =0 sb_miss=2
+        BCC Hit:1573105
+        BCC Miss:285
+        BCC P(h):0.999819
+sb_hit =0 sb_miss=393219
 ```
 
 #### **Phase 3**：自动调参

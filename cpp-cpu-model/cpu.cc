@@ -576,7 +576,7 @@ int main(int argc, char *argv[])
     const int dcacheMissWrite = ceil(dcacheLineSize/4*SRAM_FCLK_RATIO)+DCACHE_HANDSHAK_LATENCY;
     const int dcacheMissWriteRead = dcacheMissRead + dcacheMissWrite;
 
-    dcache = new Cache(false, 1, 16, dcache_P_LINE, 0, dcacheMissRead, dcacheMissWrite, dcacheMissWriteRead);
+    dcache = new Cache(true, 1, 16, dcache_P_LINE, 0, dcacheMissRead, dcacheMissWrite, dcacheMissWriteRead);
 
     /*
     * Create ICache
@@ -607,7 +607,7 @@ int main(int argc, char *argv[])
 
     for(;;) {
         cpu_clk();
-        //termtest_clk();
+        termtest_clk();
         if (termtest_done()) {
             break;
         }
